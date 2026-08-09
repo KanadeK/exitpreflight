@@ -48,6 +48,8 @@ dev = [
   "coverage[toml]>=7.6,<8",
   "mypy>=1.15,<2",
   "ruff>=0.11,<1",
+  "setuptools>=77",
+  "wheel>=0.45,<1",
 ]
 
 [tool.setuptools]
