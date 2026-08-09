@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/KanadeK/exitpreflight/main/schema/report.schema.json",
+  "title": "ExitPreflight audit report",
+  "type": "object",
+  "required": ["schema_version", "tool", "generated_at", "input", "adapters", "summary", "metrics", "findings", "files"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "tool": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"const": "exitpreflight"},
+        "version": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "generated_at": {"type": "string", "format": "date-time"},
+    "input": {
+      "type": "object",
+      "required": ["kind", "label"],
+      "properties": {
+        "kind": {"enum": ["directory", "zip", "tar"]},
+        "label": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "adapters": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "summary": {
+      "type": "object",
+      "required": ["status", "readiness_score", "severity_counts"],
+      "properties": {
+        "status": {"enum": ["ready", "review", "needs-attention", "blocked"]},
+        "readiness_score": {"type": "integer", "minimum": 0, "maximum": 100},
+        "severity_counts": {
+          "type": "object",
+          "required": ["critical", "high", "medium", "low", "info"],
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "metrics": {"type": "object", "additionalProperties": {"type": "integer"}},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fingerprint", "code", "title", "severity", "summary", "path", "target", "repair", "metadata"],
+        "properties": {
+          "fingerprint": {"type": "string", "pattern": "^[0-9a-f]{20}$"},
+          "code": {"type": "string"},
+          "title": {"type": "string"},
+          "severity": {"enum": ["critical", "high", "medium", "low", "info"]},
+          "summary": {"type": "string"},
+          "path": {"type": "string"},
+          "target": {"type": "string"},
+          "repair": {"type": "string"},
+          "metadata": {"type": "object"}
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "size", "sha256"],
+        "properties": {
+          "path": {"type": "string"},
+          "size": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

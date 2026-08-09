@@ -1,0 +1,85 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "exitpreflight"
+version = "0.1.0"
+description = "Audit SaaS data exports before you delete, downgrade, or migrate an account."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [
+  { name = "KanadeK", email = "121669563+KanadeK@users.noreply.github.com" },
+]
+keywords = [
+  "data-portability",
+  "google-takeout",
+  "slack-export",
+  "notion-export",
+  "local-first",
+  "backup",
+  "privacy",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: System :: Archiving :: Backup",
+  "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://github.com/KanadeK/exitpreflight"
+Issues = "https://github.com/KanadeK/exitpreflight/issues"
+Changelog = "https://github.com/KanadeK/exitpreflight/blob/main/CHANGELOG.md"
+
+[project.scripts]
+exitpreflight = "exitpreflight.cli:main"
+
+[project.optional-dependencies]
+dev = [
+  "build>=1.2,<2",
+  "coverage[toml]>=7.6,<8",
+  "mypy>=1.15,<2",
+  "ruff>=0.11,<1",
+]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.coverage.run]
+branch = true
+source = ["exitpreflight"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+skip_covered = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_ignores = true

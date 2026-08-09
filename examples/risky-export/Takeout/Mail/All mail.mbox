@@ -1,0 +1,9 @@
+From sender@example.com Sat Aug  1 00:00:00 2026
+From: sender@example.com
+To: owner@example.com
+Subject: Project source
+Date: Sat, 01 Aug 2026 00:00:00 +0000
+X-Gmail-Labels: Inbox,Important
+Content-Type: text/plain; charset=utf-8
+
+The source file is only available at https://drive.google.com/file/d/synthetic-demo/view

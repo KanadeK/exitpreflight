@@ -1,0 +1,38 @@
+name: Adapter or feature request
+description: Propose a recoverability check backed by an export format and repair path.
+title: "feat: "
+labels: [enhancement]
+body:
+  - type: input
+    id: service
+    attributes:
+      label: Service/export format
+    validations:
+      required: true
+  - type: textarea
+    id: failure
+    attributes:
+      label: Irrecoverable failure to prevent
+      description: What can disappear after deletion, downgrade, retention expiry, or migration?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Public format evidence
+      description: Link official documentation or a synthetic format description; never attach real data.
+    validations:
+      required: true
+  - type: textarea
+    id: metric
+    attributes:
+      label: Stable count or invariant
+      description: What should be compared between two exports?
+    validations:
+      required: true
+  - type: textarea
+    id: repair
+    attributes:
+      label: Concrete repair flow
+    validations:
+      required: true

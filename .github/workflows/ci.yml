@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Full gate (Ubuntu, Python 3.12)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install -e ".[dev]"
+      - run: python scripts/verify.py
+
+  portability:
+    name: ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: "3.11"
+          - os: windows-latest
+            python: "3.12"
+          - os: macos-latest
+            python: "3.13"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m unittest discover -s tests -v
+      - run: python -m exitpreflight audit examples/portable-export -o portable-report --strict
+      - name: Risky fixture must fail the gate but write evidence
+        shell: python
+        run: |
+          import pathlib
+          import subprocess
+          import sys
+          result = subprocess.run([
+              sys.executable, "-m", "exitpreflight", "audit", "examples/risky-export",
+              "-o", "risky-report", "--strict"
+          ])
+          assert result.returncode == 1, result.returncode
+          assert pathlib.Path("risky-report/exitpreflight-report.json").is_file()
